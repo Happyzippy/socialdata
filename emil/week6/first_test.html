@@ -8,6 +8,35 @@
     <body>
         <script type="text/javascript">
             d3.select("body").append("h1").text("Page Title");
+            var dataset = [ 5, 10, 15, 20, 25 ];
+            var data;
+            
+            var generateVisualization = function(){
+                /*data.forEach(e=>d3.select("#testviz").append("p").text(e.Food + " " + e.Deliciousness));*/
+
+                d3.select("#testviz").selectAll('p').data(data).enter().append('p')
+                    .text(e => e.Food + " " + e.Deliciousness)
+                    .style("color", e => (e.Deliciousness>5) ? "red" : "black");
+
+                /*data.forEach(function(e){
+                    d3.select("#testviz").append("p").text(e.Food + " " + e.Deliciousness);
+                });*/
+            }
+
+            d3.csv("test.csv", function(error, data_) {
+                if (error){
+                    console.log(error);
+                    return;
+                }
+                console.log(data_);
+                data = data_;
+                generateVisualization();
+                data = data.concat(data);
+                generateVisualization();
+            });
+
+
         </script>
+        <div id="testviz"></div>
     </body>
 </html>
