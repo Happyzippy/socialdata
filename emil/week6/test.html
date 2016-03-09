@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>D3 Page Template</title>
+    <style>
+
+        .link {
+          stroke: #aaa;
+          marker-end:url(#arrowhead);
+        }
+
+        .node text {
+        stroke:#333;
+        cursos:pointer;
+        }
+
+        .node circle{
+        stroke:#fff;
+        stroke-width:3px;
+        }
+
+    </style>
+    <script type="text/javascript" src="../../libraries/d3/d3.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+
+        var dataset;
+
+        var width = 960,
+            height = 500
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("refX", 6 + 3) /*must be smarter way to calculate shift*/
+            .attr("refY", 2)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 4)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M 0,0 V 4 L 6,2 Z");
+
+        var force = d3.layout.force()
+            .gravity(.05)
+            .distance(30)
+            .charge(-50)
+            .size([width, height]);
+
+        d3.csv("testdata.csv", function(error, rows) {
+            if (error){
+                console.log(error);
+                return;
+            }
+            
+            dataset = d3.map(rows, d => d.Key);
+            var edgelist = new Array();
+            rows.forEach(function(r, i){
+                var momId = rows.findIndex(x => x.Key == r.Mom);
+                if (momId >= 0){
+                    edgelist.push({
+                        source:momId,
+                        target:i,
+                        weight:1,
+                    });
+                }
+
+                var dadId = rows.findIndex(x => x.Key == r.Dad);
+                if (dadId >= 0){
+                    edgelist.push({
+                        source:dadId,
+                        target:i,
+                        weight:1,
+                    });
+                }
+                
+                
+            });
+
+            force
+                .nodes(rows)
+                .links(edgelist)
+                .start();
+
+            var link = svg.selectAll(".link")
+                .data(edgelist)
+                .enter().append("line")
+                .attr("class", "link")
+                .style("stroke-width", 1);
+            
+            
+            var node = svg.selectAll(".node")
+                .data(rows)
+                .enter().append("g")
+                .attr("class", "node")
+                .call(force.drag);
+
+            node.append("circle")
+                .attr("r","5")
+                .attr("fill", e => e.Male=="1" ? "blue" : "red");
+
+            node.append("text")
+                .attr("dx", 12)
+                .attr("dy", ".35em");
+                //.text(d => d.Name);
+
+            force.on("tick", function() {
+                link.attr("x1", function(d) { return d.source.x; })
+                    .attr("y1", function(d) { return d.source.y; })
+                    .attr("x2", function(d) { return d.target.x; })
+                    .attr("y2", function(d) { return d.target.y; });
+
+                node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });    
+            });
+        });
+
+        </script>
+    </body>
+    </html>
