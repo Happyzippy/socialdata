@@ -1,63 +1,63 @@
-Key,Breeder,Name,Male,Phenotype,Birth,Deceased,Mom,Dad,Owner
-1,,Chanel No. 6,0,Cinnamon capped notch,Ukendt købt 04.10.14,03.08.15,,,Eifos
-2,Eifos,Glitterbug,0,Cinnamon blazed variegated,8.5.15,,1,3,Eifos
-3,Hells,Peanut Slab,1,Buff blazed variegated db,14.04.14,,50,51,Hells
-4,Loftet ,Zheel,0,Russian blue berkshire dumbo,6.1.15,,,,Eifos
-5,Eifos,Elladora Black,0,Russian Blue berkshire rex db,30.10.15,,4,29,Eifos
-6,Alenyas,Skum,0,Blue agouti blazed mm. hooded db,9.6.14,,,,Eifos
-7,Hells,Sigma,0,Beige berkshire dumbo,14.11.14,,,,Eifos
-8,FoxyRats,Charmonix,0,Burmese berkshire velveteen dumbo,10.12.15,,,,Eifos
-9,Hedvigs,Safran,0,Cinnamon berkshire dumbo,14.10.14,,,,Eifos
-10,NiceRats,Myrrh,0,Black Variegated Notch DU Dumbo,24.12.14,,,,Eifos
-11,Kadiras,Schneeflocken,0,dove blazed variegated velveteen dumbo,6.10.15,,,,Eifos
-12,Kadiras,Tannenbaum,0,Mock Mink Merle Berkshire dumbo,25.9.15,,,,Eifos
-13,Kadiras,Mein Liebling,0,Dove (pearl?) agouti blazed variegated,7.10.15,,,,Eifos
-14,Hells,The Queen of Hearts,0,Black eyed Agouti Devil berkshire m. headspot dumbo,10.12.15,,,,Eifos
-15,Moniis,Artemis (Arne),0,,12.01.14,07.11.15,,,Eifos
-16,Moniis,Persefone,0,,12.01.14,06.08.15,,,Eifos
-17,,Kröis,0,,-,-,,,Eifos
-18,,Rösti,0,,-,-,,,Eifos
-19,Fnyffs,Lung-Dragen,1,Fawn hooded dumbo rex,06.01.15,,,,Fnyffs
-20,Eifos,Green Terror,0,Agouti (mismarked) blazed variegated rex,02.02.16,,2,19,Eifos
-21,Eifos,Panda Dwarf,1,Black berkshire,02.02.16,,2,19,Storm
-22,Eifos,Oscar,1,Agouti varieberk dumbo,02.02.17,,2,19,aviâja
-23,Eifos,Red Devil,1,Russian Fawn variegated blazed/headspot rex dumbo,02.02.17,,2,19,Belinda/Webmor-rotter
-24,Eifos,Firemouth,1,Fawn variegated blazed rex,02.02.18,,2,19,Mettes/Fnyff 
-25,Eifos,Bumblebee Mouthbrooder,1,Fawn berkshire rex dumbo,02.02.18,,2,19,Mette/fnyff 
-26,Eifos,Malawi Eyebiter,1,Mink hooded mm rex dumbo,02.02.19,,2,19,Eifos/udstationeres hos Ida
-27,Eifos,Auratus,1,Fawn hooded variegated m. headspot rex dumbo,02.02.19,,2,19,Malene/Mataleto Rotter
-28,Eifos,Sunshine Peacock,1,Agouti variegated ,02.02.20,,2,19,storm
-29,Stigaards Caius,,1,Russian beige berkshire rex,03.05.14,,,,
-30,Eifos,F.E.A.R.,1,Mink variegated m. headspot,08.05.15,,1,3,Astrid/Hedvig's Rotterede
-31,Eifos,Rainbow Road,1,Cinnamon blazed capped odd-eye,08.05.15,,1,3,Susan/HellRats
-32,Eifos,Love Stuff,1,Cinnamon blazed capped notch,08.05.15,,1,3,Mie Hansen Lisi
-33,Eifos,Kiss My Lips,1,Cinnamon blazed capped notch,08.05.15,,1,3,Mie Hansen Lisi
-34,Eifos,Haven,0,Cinnamon variegated m. headspot,08.05.15,,1,3,Camilla Rainer Brodt
-35,Eifos,Sauna,0,Mink blazed capped notch,08.05.15,,1,3,Monika Hermansen
-36,Eifos,I Love You Honeybear,0,Cinnamon blazed capped ,08.05.15,,1,3,Tina og Catharina
-37,Eifos,Herbert Burke,1,Russian blue irish dumbo (mørk mave),30.10.15,,4,29,Ida og Michael
-38,Eifos,Pollux Black,1,Russian Beige varieberk dumbo rex,30.10.15,,4,29,Udstationeres hos Kristine Myrvold
-39,Eifos,Phineas Nigellus Black,1,Russian beige berkshire dumbo rex,30.10.15,,4,29,Ida og Michael
-40,Eifos,Sirius Black,1,Russian Beige berkshire dumbo,30.10.15,,4,29,Erling
-41,Eifos,James Potter,1,Russian Beige berkshire db,30.10.15,,4,29,Ida og Michael
-42,Eifos,Ted Tonks,1,Russian Beige berkshire dumbo rex,30.10.15,,4,29,Erling
-43,Eifos,Alphard Black,1,Russian Beige (irish?) db,30.10.15,,4,29,Erling
-44,Eifos,Bellatrix Black,0,Russian Beige hooded m. headspot dumbo,30.10.15,,4,29,Christina
-45,Eifos,Ursula flint,0,Russian Blue irish db (mørk mave),30.10.15,,4,29,Anne-mette
-46,Eifos,Isla Black,0,​Russian Blue irish dumbo (mørk mave) ,30.10.15,,4,29,Christina
-47,Eifos,Cassiopeia Black,0,​Russian Beige berkshire db rex,30.10.15,,4,29,Astrid/Hedvig's Rotterede
-48,Eifos,Callidora Black,0,Russian Beige (irish?) dumbo,30.10.15,,4,29,Magrethe Werk
-49,Eifos,Violette Bulstrode,0,​Russian Beige berkshire db rex,30.10.15,,4,29,Anne-mette
-50,Fistalnagers,The Duchess Marrone,0,"Mink varieberk blazed odd-eye dumbo (bærer beige, blue, champagne og PEW) ",,,,,
-51,Hells,Rufio the Magnificent,1,"Mink blazed bareback notch db (bærer beige, blue, champagne og PEW) ",,,62,52,
-52,Hedvigs,Mingo,1,Mink hooded mm. dumbo (siamese bærer),,,58,53,
-53,DRDk,Kotoense,1,Cinnamon berkshire dumbo ,,,55,54,
-54,DRDk,Teddy,1,Cinnamon berkshire dumbo ,,,,,
-55,DRDk,Dusty,0,Mink self dumbo ,,,,,
-56,,Willow,1,Mink berkshire (fawnbærer),,,,,
-57,MR M/F,Agata,0,Mink hooded dumbo (fawnbærer),,,,,
-58,Blackies,Chandra,0,Mink merle hooded db ,,,57,56,
-59,Dhiins,Wikipedia,0,Black patched,,,,,
-60,Dhiins,Yatzy,1,Mink capped notch,,,59,,
-61,,Nintendo Wii,0,Russia beige blazed hooded dumbo,,,,,
-62,Hells,Beast,0,Black Variegated mm. m. Headspot (siamese bærer) ,,,61,60,
+Key,Breeder,Name,Male,Phenotype,Birth,Deceased,Mom,Dad,Owner,Litter
+1,,Chanel No. 6,0,Cinnamon capped notch,Ukendt købt 04.10.14,03.08.15,,,Eifos,
+2,Eifos,Glitterbug,0,Cinnamon blazed variegated,8.5.15,,1,3,Eifos,
+3,Hells,Peanut Slab,1,Buff blazed variegated db,14.04.14,,50,51,Hells,
+4,Loftet ,Zheel,0,Russian blue berkshire dumbo,6.1.15,,,,Eifos,
+5,Eifos,Elladora Black,0,Russian Blue berkshire rex db,30.10.15,,4,29,Eifos,
+6,Alenyas,Skum,0,Blue agouti blazed mm. hooded db,9.6.14,,,,Eifos,
+7,Hells,Sigma,0,Beige berkshire dumbo,14.11.14,,,,Eifos,
+8,FoxyRats,Charmonix,0,Burmese berkshire velveteen dumbo,10.12.15,,,,Eifos,
+9,Hedvigs,Safran,0,Cinnamon berkshire dumbo,14.10.14,,,,Eifos,
+10,NiceRats,Myrrh,0,Black Variegated Notch DU Dumbo,24.12.14,,,,Eifos,
+11,Kadiras,Schneeflocken,0,dove blazed variegated velveteen dumbo,6.10.15,,,,Eifos,
+12,Kadiras,Tannenbaum,0,Mock Mink Merle Berkshire dumbo,25.9.15,,,,Eifos,
+13,Kadiras,Mein Liebling,0,Dove (pearl?) agouti blazed variegated,7.10.15,,,,Eifos,
+14,Hells,The Queen of Hearts,0,Black eyed Agouti Devil berkshire m. headspot dumbo,10.12.15,,,,Eifos,
+15,Moniis,Artemis (Arne),0,,12.01.14,07.11.15,,,Eifos,
+16,Moniis,Persefone,0,,12.01.14,06.08.15,,,Eifos,
+17,,Kröis,0,,-,-,,,Eifos,
+18,,Rösti,0,,-,-,,,Eifos,
+19,Fnyffs,Lung-Dragen,1,Fawn hooded dumbo rex,06.01.15,,,,Fnyffs,
+20,Eifos,Green Terror,0,Agouti (mismarked) blazed variegated rex,02.02.16,,2,19,Eifos,
+21,Eifos,Panda Dwarf,1,Black berkshire,02.02.16,,2,19,Storm,
+22,Eifos,Oscar,1,Agouti varieberk dumbo,02.02.17,,2,19,aviâja,
+23,Eifos,Red Devil,1,Russian Fawn variegated blazed/headspot rex dumbo,02.02.17,,2,19,Belinda/Webmor-rotter,
+24,Eifos,Firemouth,1,Fawn variegated blazed rex,02.02.18,,2,19,Mettes/Fnyff ,
+25,Eifos,Bumblebee Mouthbrooder,1,Fawn berkshire rex dumbo,02.02.18,,2,19,Mette/fnyff ,
+26,Eifos,Malawi Eyebiter,1,Mink hooded mm rex dumbo,02.02.19,,2,19,Eifos/udstationeres hos Ida,
+27,Eifos,Auratus,1,Fawn hooded variegated m. headspot rex dumbo,02.02.19,,2,19,Malene/Mataleto Rotter,
+28,Eifos,Sunshine Peacock,1,Agouti variegated ,02.02.20,,2,19,storm,
+29,Stigaards Caius,,1,Russian beige berkshire rex,03.05.14,,,,,
+30,Eifos,F.E.A.R.,1,Mink variegated m. headspot,08.05.15,,1,3,Astrid/Hedvig's Rotterede,
+31,Eifos,Rainbow Road,1,Cinnamon blazed capped odd-eye,08.05.15,,1,3,Susan/HellRats,
+32,Eifos,Love Stuff,1,Cinnamon blazed capped notch,08.05.15,,1,3,Mie Hansen Lisi,
+33,Eifos,Kiss My Lips,1,Cinnamon blazed capped notch,08.05.15,,1,3,Mie Hansen Lisi,
+34,Eifos,Haven,0,Cinnamon variegated m. headspot,08.05.15,,1,3,Camilla Rainer Brodt,
+35,Eifos,Sauna,0,Mink blazed capped notch,08.05.15,,1,3,Monika Hermansen,
+36,Eifos,I Love You Honeybear,0,Cinnamon blazed capped ,08.05.15,,1,3,Tina og Catharina,
+37,Eifos,Herbert Burke,1,Russian blue irish dumbo (mørk mave),30.10.15,,4,29,Ida og Michael,
+38,Eifos,Pollux Black,1,Russian Beige varieberk dumbo rex,30.10.15,,4,29,Udstationeres hos Kristine Myrvold,
+39,Eifos,Phineas Nigellus Black,1,Russian beige berkshire dumbo rex,30.10.15,,4,29,Ida og Michael,
+40,Eifos,Sirius Black,1,Russian Beige berkshire dumbo,30.10.15,,4,29,Erling,
+41,Eifos,James Potter,1,Russian Beige berkshire db,30.10.15,,4,29,Ida og Michael,
+42,Eifos,Ted Tonks,1,Russian Beige berkshire dumbo rex,30.10.15,,4,29,Erling,
+43,Eifos,Alphard Black,1,Russian Beige (irish?) db,30.10.15,,4,29,Erling,
+44,Eifos,Bellatrix Black,0,Russian Beige hooded m. headspot dumbo,30.10.15,,4,29,Christina,
+45,Eifos,Ursula flint,0,Russian Blue irish db (mørk mave),30.10.15,,4,29,Anne-mette,
+46,Eifos,Isla Black,0,​Russian Blue irish dumbo (mørk mave) ,30.10.15,,4,29,Christina,
+47,Eifos,Cassiopeia Black,0,​Russian Beige berkshire db rex,30.10.15,,4,29,Astrid/Hedvig's Rotterede,
+48,Eifos,Callidora Black,0,Russian Beige (irish?) dumbo,30.10.15,,4,29,Magrethe Werk,
+49,Eifos,Violette Bulstrode,0,​Russian Beige berkshire db rex,30.10.15,,4,29,Anne-mette,
+50,Fistalnagers,The Duchess Marrone,0,"Mink varieberk blazed odd-eye dumbo (bærer beige, blue, champagne og PEW) ",,,,,,
+51,Hells,Rufio the Magnificent,1,"Mink blazed bareback notch db (bærer beige, blue, champagne og PEW) ",,,62,52,,
+52,Hedvigs,Mingo,1,Mink hooded mm. dumbo (siamese bærer),,,58,53,,
+53,DRDk,Kotoense,1,Cinnamon berkshire dumbo ,,,55,54,,
+54,DRDk,Teddy,1,Cinnamon berkshire dumbo ,,,,,,
+55,DRDk,Dusty,0,Mink self dumbo ,,,,,,
+56,,Willow,1,Mink berkshire (fawnbærer),,,,,,
+57,MR M/F,Agata,0,Mink hooded dumbo (fawnbærer),,,,,,
+58,Blackies,Chandra,0,Mink merle hooded db ,,,57,56,,
+59,Dhiins,Wikipedia,0,Black patched,,,,,,
+60,Dhiins,Yatzy,1,Mink capped notch,,,59,,,
+61,,Nintendo Wii,0,Russia beige blazed hooded dumbo,,,,,,
+62,Hells,Beast,0,Black Variegated mm. m. Headspot (siamese bærer) ,,,61,60,,
