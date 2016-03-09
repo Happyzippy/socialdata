@@ -101,7 +101,9 @@
 
             node.append("circle")
                 .attr("r","5")
-                .attr("fill", e => e.Male=="1" ? "blue" : "red");
+                .attr("fill", e => e.Male=="1" ? "blue" : "red")
+                .append("svg:title")
+                .text(e => e.Name);
 
             node.append("text")
                 .attr("dx", 12)
