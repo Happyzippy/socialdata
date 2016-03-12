@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>D3 Page Template</title>
+    <title>Register</title>
     <style>
         table{
             font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -128,7 +128,7 @@
                     if (parts.length > 1 ){
                         if (parts[1].length==0){
                             filterFunction = function(r){
-                                r=> r[columns[c]].length > 0;
+                                this.col = r[columns[c]].length > 0;
                             };
                         }else{
                             console.log(parts);
