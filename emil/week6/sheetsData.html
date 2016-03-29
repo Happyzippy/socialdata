@@ -29,7 +29,13 @@
             padding: 8px;
         }
 
-        tr:nth-child(even){background-color: #f2f2f2}
+        tr:nth-child(even){
+            background-color: #f2f2f2;
+        }
+
+        tr:hover{
+            background-color: #e2e2e2;
+        }
 
         input[type="text"]{
             font-size: 15px;
@@ -47,8 +53,7 @@
 <body>
     <script type="text/javascript">
         
-        var selectedSheet = "Rats";
-
+        var RatsTable;
         var tbody, data
         window.onload = function() { init() };
 
@@ -58,105 +63,94 @@
                 simpleSheet: false });
         }
 
-        function sheetLoaded(df, tabletop){
-            console.log(df)
-            
+        function sheetLoaded(df, tabletop){           
             data = df;
-            initializeTable(data[selectedSheet].elements, "#sheet_table");
+            RatsTable = new DataTable(data.Rats.elements, "#sheet_table");
         }
 
-        function initializeTable(data, container){
-            var table = d3.select(container).append("table"),
-                thead = table.append("thead");
-            
-            tbody = table.append("tbody");
-            console.log(data);
-            columns = Object.keys(data[0]);
-            
+        function DataTable(df_, container_){
+            this.df = df_;
+            this.container = container_;
 
-            thead.append("tr").append("th").attr("colspan",columns.length)
-                .append("form").append("input")
-                .attr({
-                    type:"text",
-                    onkeyup:"updateTableContent(this.value);",
-                    id:"tableSearchCriteria",
-                    placeholder:"Search...",
-                });
+            this.initialize = function(){
+                this.table = d3.select(this.container).append("table"),
+                this.columns = Object.keys(this.df[0]);
 
-            thead.append("tr")
-                .selectAll("th")
-                .data(columns)
-                .enter()
-                .append("th")
-                .attr("class", "columntitles")
-                .text(c => c);
-            
-            updateTableContent("")
-        }
+                this.thead = this.table.append("thead");
+                this.tbody = this.table.append("tbody");
 
-        function renderTable(tbody, data, columns){
-            
-            var rows = tbody.selectAll("tr").data(data)
+                this.searchInput = this.thead.append("tr").append("th").attr("colspan", this.columns.length)
+                    .append("form").append("input")
+                    .attr({
+                        type:"text",
+                        onkeyup:"RatsTable.updateSearchQuery(this.value);",
+                        id:"tableSearchCriteria",
+                        placeholder:"Search...",
+                    })
 
-            rows.enter().append("tr");
+                this.thead.append("tr")
+                    .selectAll("th")
+                    .data(this.columns)
+                    .enter()
+                    .append("th")
+                    .attr("class", "columntitles")
+                    .text(c => c);
+                
+                this.render(this.df);
+                //this.updateContent("")
+            }
 
-            rows.exit().remove();
+            this.render = function(data){
 
-            // create a cell in each row for each column
-            var cells = rows.selectAll("td")
-                .data(function(row) {
-                    return columns.map(function(column) {
-                        return {column: column, value: row[column]};
+                var rows = this.tbody.selectAll("tr").data(data)
+
+                rows.enter().append("tr");
+                
+                rows.exit().remove();
+
+                // create a cell in each row for each column
+                var this_ = this;
+                var cells = rows.selectAll("td")
+                    .data(function(row) {
+                        return this_.columns.map(function(column) {
+                            return {column: column, value: row[column]};
+                        });
                     });
-                });
 
-            cells.enter().append("td");
+                cells.enter().append("td");
 
-            cells.text(d => d.value);
+                cells.text(d => d.value);
 
-            cells.exit().remove();
-        }
+                cells.exit().remove();
+            }
 
-        function updateTableContent(query){
-            if(query.length == 0){
-                renderTable(tbody, data[selectedSheet].elements, columns);
-            }else{
-                // Choose filter function by key
-                var filterFunction;
-                for(var c in columns){
-                    parts = query.split(columns[c] + ":")
-                    if (parts.length > 1 ){
-                        if (parts[1].length==0){
-                            filterFunction = function(r){
-                                this.col = r[columns[c]].length > 0;
-                            };
-                        }else{
-                            console.log(parts);
-                            query = parts[1].toLowerCase();
-                            filterFunction = r=> r[columns[c]].toLowerCase().indexOf(query)>=0;
+            this.updateSearchQuery = function(query){
+                if(query.length == 0){
+                    this.render(this.df);
+                }else{
+                    // Choose filter function by key
+                    for(var c in this.columns){
+
+                        parts = query.split(this.columns[c] + ":")
+                        if (parts.length > 1 && parts[0].length == 0){
+                            if (parts[1].length==0){
+                                this.render(this.df.filter(r=> r[this.columns[c]].length > 0));
+                            }else{
+                                this.render(this.df.filter(r=> r[this.columns[c]].toLowerCase().indexOf(parts[1].toLowerCase())>=0));
+                            }
+                            return;
                         }
                     }
-                }
 
-                // Fall back
-                if(filterFunction == null){
+                    // Fall back
                     query = query.toLowerCase();
-                    filterFunction = r => Object.keys(r).some(c => r[c].toLowerCase().indexOf(query)>=0);
+                    this.render(this.df.filter(r => Object.keys(r).some(c => r[c].toLowerCase().indexOf(query)>=0)));
                 }
-                console.log(filterFunction);
-                console.log(query);
-                renderTable(tbody, data[selectedSheet].elements.filter(filterFunction), columns);
             }
-        }
-        
-/*
-        var data;
-        d3.json("http://spreadsheets.google.com/feeds/list/1lcFYWZAfJqrzu4DeBMD3vSCOuK2m6XABIqmQCtT5ghY/od6/public/values?alt=json", function (json) {
 
-            data = json.feed.entry;
-        })
-*/
-        </script>
+            this.initialize();
+        }
+    </script>
 
         <div id="sheet_table">
         </div>

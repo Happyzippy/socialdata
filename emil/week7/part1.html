@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Week 7 part 1</title>
+  <script type="text/javascript" src="../../libraries/d3/d3.js"></script>
+  <style>
+      * {
+        font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      }
+
+      .scatterChart circle {
+        fill: orange;
+        fill-opacity:0.5
+      }
+
+      .barChart rect {
+        fill: steelblue;
+        fill-opacity:0.5
+      }
+
+      .axis path, .axis line{
+        fill: none;
+        stroke: black;
+      }
+
+      .line{
+        fill: none;
+        stroke: blue;
+        stroke-width: 2px;
+      }
+
+      .tick text{
+        font-size: 15px;
+      }
+
+      .tick line{
+        opacity: 0.2;
+      }
+
+  </style>
+</head>
+<body>
+  <script type="text/javascript">
+    window.onload = function() { init() };
+    // data
+    var chart_height = 480;
+    var chart_width = 600;
+    var margin = 110;
+
+    var buf;
+    
+    function init(){
+      
+
+      d3.csv("district_crime_categories.csv",
+        function(element){
+          buf = element
+          return {
+            label:element.district,
+            meta:+element.year,
+            x:+element.PROSTITUTION,
+            xlabel:"Prostitution",
+            y:+element['VEHICLE THEFT'],
+            ylabel:"Vehicle theft",
+            z:+element.total,
+            zlabel:'Total number of crimes',
+          }
+        },
+        function(error, data) {
+          if (error){
+            console.log(error);
+            return;
+          }
+          //buf = initializeSVGScatterChart(d3.select("body"), data);
+        });
+        
+      d3.csv("district_crime_categories.csv",
+        function(element){
+          return {
+            label:element.district,
+            meta:+element.year,
+            x:+element.PROSTITUTION,
+            xlabel:"Prostitution",
+            y:+element['VEHICLE THEFT'],
+            ylabel:"Vehicle theft",
+            z:+element.total,
+            zlabel:'Total number of crimes',
+          }
+        },
+        function(error, data) {
+          if (error){
+            console.log(error);
+            return;
+          }
+          //initializeSVGBarChart(d3.select("body"), data);
+          initializeDragger(d3.select("body"), [1,2,3,4,5]);
+        });
+    }
+
+    function initializeDragger(element, data){
+      var margin_side = 25
+
+      scale = d3.scale.linear()
+        .domain(d3.extent(data))
+        .range([margin_side, chart_width-margin_side]);
+
+      var svg = element.append("svg")
+      .attr({
+        class: "scatterChart",
+        width: chart_width,
+        height: 50,
+      });
+      buf = scale
+      var lineGraph = svg.append("path")
+                          .attr("d","M"+scale.range()[0]+" 10 L"+scale.range()[1]+" 10")
+                          .attr("stroke", "blue")
+                          .attr("stroke-width", 2)
+                          .attr("fill", "none");
+
+      ticks = svg.selectAll('circle').data(data);
+
+      ticks.enter().append('circle').attr({
+        cx:d => scale(d),
+        cy:10,
+        r:3,
+      });
+
+      var selectedIx = 1;
+
+      var selector = svg.append('circle').attr({
+        cx:scale(data[selectedIx]),
+        cy:10,
+        r:10,
+      });
+    }
+
+    function initializeSVGScatterChart(element, data){
+      var svg = element.append("svg")
+      .attr({
+        class: "scatterChart",
+        width: chart_width,
+        height: chart_height,
+      });
+      
+      var xAxisG = svg.append('g').attr("class","axis").attr("transform", "translate("+margin+","+(chart_height-margin)+")");
+
+      var yAxisG = svg.append('g').attr("class","axis").attr("transform", "translate("+margin+","+margin+")");
+
+      yAxisG.append('text').attr({
+        x:-(chart_height-2*margin)/2,
+        y:-60,
+        transform:"rotate(-90)",
+        class: "ylabel",
+      }).style("text-anchor","middle").text(data[0].xlabel);
+
+      var dataG = svg.append('g').attr("transform", "translate("+margin+","+margin+")");
+
+      xAxisG.append('text').attr({
+        x:(chart_width-2*margin)/2,
+        y:45,
+        class: "xlabel",
+      }).style("text-anchor","middle").text(data[0].ylabel);
+
+      var height = chart_height-2*margin;
+      var width = chart_width-2*margin;
+
+      var xscale = d3.scale.linear()
+        .domain(d3.extent(data, d => d.x))
+        .range([0, width]);
+
+      var yscale = d3.scale.linear()
+        .domain(d3.extent(data, d => d.y))
+        .range([height, 0]);
+
+      var zscale = d3.scale.sqrt()
+        .domain([0, d3.max(data, d => d.z)])
+        .range([0, 10]);
+
+      xAxisG.call(d3.svg.axis().scale(xscale).orient("bottom").innerTickSize(-height).tickPadding(10));
+      yAxisG.call(d3.svg.axis().scale(yscale).orient("left").innerTickSize(-width).tickPadding(10));
+
+      filter = e => e.meta == 2006;
+
+      var chart = {svg, dataG, xAxisG, yAxisG, data, xscale, yscale, zscale, filter, renderSVGScatterChart};
+      renderSVGScatterChart(chart);
+
+      return chart;
+    }
+
+    function renderSVGScatterChart(chart){
+
+      var dots = chart.dataG.selectAll("circle").data(chart.data.filter(chart.filter));
+
+      dots.enter().append("circle").attr({
+        r:  0,
+        cx: chart.xscale.range()[0],
+        cy: chart.yscale.range()[0],
+      });
+      
+      dots.transition().duration(500).ease("circle").attr({
+          r: d => chart.zscale(d.z),
+          cx:d => chart.xscale(d.x),
+          cy:d => chart.yscale(d.y),
+      });
+
+      dots.append("svg:title").text(d=>d.label + ":" +d.x + "," + d.y + "," + d.z)
+
+      dots.exit().remove();    
+    }
+
+    function initializeSVGBarChart(element, data){
+      var svg = element.append("svg")
+        .attr({
+          class: "barChart",
+          width: chart_width,
+          height: chart_height,
+        });
+
+      var xAxisG = svg.append('g').attr("class","axis").attr("transform", "translate("+margin+","+margin+")");
+      var dataG = svg.append('g').attr("transform", "translate("+margin+","+margin+")");
+
+      var yAxisG = svg.append('g').attr("class","axis").attr("transform", "translate("+margin+","+(chart_height-margin)+")");
+
+      /*
+      xAxisG.append('text').attr({
+          x:(chart_width-2*margin)/2,
+          y:45,
+          class: "xlabel",
+        }).style("text-anchor","middle").text("District");
+      */
+      
+      var height = chart_height-2*margin;
+      var width = chart_width-2*margin;
+      
+      var xscale = d3.scale.linear()
+        .domain([0, d3.max(data, d => d.x)])
+        .range([0, width]);
+      
+      var yscale = d3.scale.ordinal()
+        .domain(data.map(d=>d.label))
+        .rangeBands([0, height])
+        .rangeRoundBands([0, height], .1);
+
+      xAxisG.call(d3.svg.axis().scale(yscale).orient("left"));
+      yAxisG.call(d3.svg.axis().scale(xscale).orient("bottom").innerTickSize(-height).tickPadding(10));
+
+      filter = e=>true;
+
+      var chart = {svg, dataG, xAxisG, yAxisG, data, xscale, yscale, filter, renderSVGScatterChart};
+
+      renderSVGBarChart(chart);
+      return chart;
+    }
+
+    function renderSVGBarChart(chart){
+      
+      bars = chart.dataG.selectAll("rect").data(chart.data);
+
+      bars.enter().append("rect").attr({
+        y: d => chart.yscale(d.label),
+        x: chart.xscale(0),
+        width: 0,
+        height:chart.yscale.rangeBand(),
+        onclick: "clickHandler()",
+      });
+      
+      
+      bars.transition().duration(500).ease("linear").attr({          
+        y: d => chart.yscale(d.label),
+        x: chart.xscale(0),
+        width: d=> chart.xscale(d.x),
+        height:chart.yscale.rangeBand(),
+        });
+      bars.append("svg:title").text(d=>d.x);
+      
+      bars.exit().remove();
+    }
+
+    function clickHandler(){
+      var last = dataset[dataset.length-1].title
+      buf = last
+      dataset.push({title: String.fromCharCode(last.charCodeAt(0)+1), x:Math.random()*50})
+      //renderSVGBarChart(s,v,g, dataset, chart_width-2*margin, chart_height-2*margin);
+    }
+  </script>
+</body>
+</html>
