@@ -181,7 +181,7 @@
       slider.call(brush.event).transition().duration(750).call(brush.extent([2,2])).call(brush.event);
 
       // Load Data
-      d3.json("../../data/sfpddistricts.geojson", function(json) {
+      d3.json("sfpddistricts.geojson", function(json) {
           mapData = json;
           renderMap('k6');
       });
