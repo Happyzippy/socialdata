@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Week 7 part 1</title>
+  <script type="text/javascript" src="../../libraries/d3/d3.js"></script>
+  <style>
+      * {
+        font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      }
+
+      .scatterChart circle {
+        fill: orange;
+        fill-opacity:0.5
+      }
+
+      .barChart rect {
+        fill: steelblue;
+        fill-opacity:0.5
+      }
+
+      .axis path, .axis line{
+        fill: none;
+        stroke: black;
+      }
+
+      .line{
+        fill: none;
+        stroke: blue;
+        stroke-width: 2px;
+      }
+
+      .tick text{
+        font-size: 15px;
+      }
+
+      .tick line{
+        opacity: 0.2;
+      }
+
+  </style>
+</head>
+<body>
+  <script type="text/javascript">
+    window.onload = function() { init() };
+    // data
+    var chart_height =300;
+    var chart_width = 480;
+    var outerRadius = d3.min([chart_height, chart_width]) / 2;
+    var innerRadius = outerRadius*0.8;
+    
+    var margin = 110;
+
+    var dataset = [ 5, 10, 20, 45, 6, 25 ];
+    var color = d3.scale.category10();
+    var buf
+    function init(){
+      var pie = d3.layout.pie();
+
+      var arc = d3.svg.arc()
+                .innerRadius(innerRadius)
+                .outerRadius(outerRadius);
+      buf = arc
+      var svg = d3.select("body")
+            .append("svg")
+            .attr("width", chart_width)
+            .attr("height", chart_height);
+
+      var arcs = svg.selectAll("g.arc")
+        .data(pie(dataset))
+        .enter()
+        .append("g")
+        .attr("class", "arc")
+        .attr("transform", "translate(" + outerRadius + ", " + outerRadius + ")");
+
+      //Draw arc paths
+      arcs.append("path")
+          .attr("fill", (d, i) => color(i))
+          .attr("d", arc);
+
+      arcs.append("text")
+        .attr("transform", d => "translate(" + arc.centroid(d) + ")")
+        .attr("text-anchor", "middle")
+        .text(d => d.value);
+
+
+    }
+  </script>
+</body>
+</html>
