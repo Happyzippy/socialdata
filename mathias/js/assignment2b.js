@@ -1,8 +1,8 @@
 /**
  * Created by Mathias on 30-03-2016.
  */
-var w = 1400;
-var h = 700;
+var w = 860;
+var h = 500;
 var padding = 60;
 
 var dataset;
@@ -15,7 +15,7 @@ loadData();
 
 function loadData(){
     //Load data from csv
-    d3.csv("../../data/assignment2b_data.csv", function(error, data) {
+    d3.csv("../mathias/data/assignment2b_data.csv", function(error, data) {
         if (error) {  //If error is not null, something went wrong.
             console.log(error);  //Log the error.
         } else {      //If no error, the file loaded correctly. Yay!
@@ -40,7 +40,7 @@ function cleanData(){
 function makePlot(){
 
     //Add svg to body
-    var svg = d3.select("body")
+    var svg = d3.select("#b_scatter")
         .append("svg")
         .attr({
             height: h,
@@ -152,22 +152,22 @@ function makePlot(){
         .attr("transform", "rotate(-90)")
         .text("Total number of vehicle theft incidents");
     //On click handle transition
-    d3.select("p")
+    d3.select("#scatterToggler")
         .on("click", function() {
             if(!currentIs2003){//Toggle dataset
                 currentSet = data03;
-                d3.select("p").text("Click here to toggle, 2003 is selected")
+                d3.select("#scatterToggler").text("Click here to toggle, 2003 is selected")
                 currentIs2003 = true;
             }else{
                 currentSet = data15;
-                d3.select("p").text("Click here to toggle, 2015 is selected")
+                d3.select("#scatterToggler").text("Click here to toggle, 2015 is selected")
                 currentIs2003 = false;
             }
             //Update cicles
             svg.selectAll("circle")
                 .data(currentSet)
                 .transition()
-                .duration(2000)
+                .duration(1000)
                 .ease("linear")
                 .delay(function (d, i) {
                     return i * 1000 / currentSet.length
@@ -185,7 +185,7 @@ function makePlot(){
             svg.selectAll("text")
                 .data(currentSet)
                 .transition()
-                .duration(2000)
+                .duration(1000)
                 .ease("linear")
                 .delay(function (d,i) {
                     return i * 1000 / currentSet.length
