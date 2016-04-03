@@ -52,9 +52,8 @@ function drawMap(dataset){
     .append("text").text(d => d.properties.DISTRICT).attr({
       x: d => path.centroid(d)[0],
       y: d => path.centroid(d)[1],
-      "text-anchor":"middle",
       class: "districtText",
-    });
+    }).attr("text-anchor","middle");
 }
 
 // Draw the prostitution incidents on the map
