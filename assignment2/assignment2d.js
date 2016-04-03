@@ -50,8 +50,8 @@ function drawMap(dataset){
   // Add district names
   districtNameGroup.selectAll("text").data(dataset.features).enter()
     .append("text").text(function(d){ return d.properties.DISTRICT}).attr({
-      x: d => path.centroid(d)[0],
-      y: d => path.centroid(d)[1],
+      x: function(d){ return path.centroid(d)[0]},
+      y: function(d){ return path.centroid(d)[1]},
       class: "districtText",
     }).attr("text-anchor","middle");
 }
@@ -59,7 +59,7 @@ function drawMap(dataset){
 // Draw the prostitution incidents on the map
 function drawDatapoints(dataset, selector){
   // Select and filter datapoints
-  var dp = datapointGroup.selectAll("circle.datapoint").data(dataset.filter((d,i) => i%5==1));
+  var dp = datapointGroup.selectAll("circle.datapoint").data(dataset.filter(function(d,i) { i%5==1}));
 
   // add svg DOM elements
   dp.enter()
