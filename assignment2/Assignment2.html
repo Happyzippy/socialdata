@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<head>
+    
+    <meta charset="utf-8">
+    <title>Assignment 2</title>
+    <script type="text/javascript" src="../libraries/d3/d3.js"></script>
+    
+    <!-- CSS style-->
+    <style>
+
+        /*Setting CSS rules for body*/
+        body {
+          font-family: "Helvetica Neue"; /*Setting font*/
+          margin: auto;
+          position: relative;
+          width: 860px;                 /*Used a width of 860px*/
+        }
+        
+        /*Setting font rules for axis text*/
+        .axis text {
+          font: 10px sans-serif;
+        }
+
+        /*Making the axis line less bold and render "better" edges*/
+        .axis path,
+        .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+        /* Set the x axis to display none,
+        such that only tick is displayed*/
+        .x.axis path {
+            display: none;
+        }
+
+        /*Setting the color of bars to steelblue*/
+        .bar {
+            fill: steelblue;
+        }
+        /*Setting a hover color for the bars*/
+        .bar:hover {
+            fill: orange;
+        }
+    </style>
+</head>
+<body>
+    
+            
+    <!--                                         Assigment 2A                                              -->
+        
+    
+    <h2>Assignment 2A: Simple SVG stuff</h2>
+
+    <p> Using Javascript to make five paragraph that each count up to a specific number depending on the data array. The color is changed by using d3.scale.category10().</p>
+    <p>The rectangle is made by manually typing it in a svg canvas. The width and height is set to 80px, the border is gray with border width of 2. Inspect the website for the comments made in the code. 
+    </p>
+    <!-- Script code for "I can count..." -->
+    <script type="text/javascript">
+
+        //Intialising the dataset
+        var dataset = [ 5, 10, 15, 20, 25 ];
+
+        //Intialising a simple color set
+        var colors = d3.scale.category10();
+
+
+        d3.select("body").selectAll("p") 
+            .data(dataset)              //Tell the script which dataset to use
+            .enter()
+            .append("p")                //Append a <p>
+            .text(function(d) { return "I can count up to " + d; })  //Insert text to <p> with use of function
+            .style("color", function(d, i) {
+                return colors(i);       //Apply a new color for each run using i
+            })
+            .style("font-family", "sans-serif")     //Sets the font family to sans serif
+            .style("font-size", "13px");            //Sets the <p> size to 13px
+    </script>
+
+    <!--Making a svg canvas-->
+    <svg width="400" height="300">
+
+        <!--
+            Tells the browser to draw five rect with differents values
+            Fill gives the rect a color.
+            x and y is the cordinats which the center of the rect will be placed.
+            width and height determind the size of the rect.
+            Opacity makes it transparent based on the value.
+            Stroke gives the border a color, in this case gray.
+            Stroke-width gives the border a certain size, in this case a border of width 2.
+        -->
+        <rect x="0" y="220" width="80" height="80" fill="purple" opacity="1" stroke="gray" stroke-width="2"></rect>
+        <rect x="40" y="180" width="80" height="80" fill="green" opacity="0.9" stroke="gray" stroke-width="2"></rect>
+        <rect x="80" y="140" width="80" height="80" fill="cyan" opacity="0.6" stroke="gray" stroke-width="2"></rect>
+        <rect x="120" y="100" width="80" height="80" fill="red" opacity="0.3" stroke="gray" stroke-width="2"></rect>
+        <rect x="160" y="60" width="80" height="80" fill="yellow" opacity="0.1" stroke="gray" stroke-width="2"></rect>
+    </svg>
+    
+    <!--                                         End of assignment 2A                                    -->
+    
+    <!--                                         Assigment 2B                                              -->
+
+    
+    
+    <!--                                         Assignment 2C                                                     -->
+    
+    <h2>Assignment 2C: One barchart and (at least) two datasets</h2>
+    
+    <p>Above the bar chart is three radio buttons located. These are used to change between the datasets. The datasets come from csv files that contains DayOfWeek, Date, PdDistrict for Tenderloin in January. The reason is to keep a datafile that is of reasonable size such that run time is short.
+    <br><br>
+    The frequency of incidents that happens on monday, tuesday etc. is counted and then displayed on the bar chart in order to see how the amount of incidents is distributed.
+    <br>
+    When selecting new datasets are there no changes made to axis since it gives a better virtual feedback on how amount of incidents vary.</p>
+    <!-- Radio buttons that are used to change between datasets-->
+    <form>
+        <label><input type="radio" name="mode" value="2006" checked> Jan 2006</label>
+        <label><input type="radio" name="mode" value="2014"> Jan 2014</label>
+        <label><input type="radio" name="mode" value="2016">Jan 2016</label>
+    </form>
+    
+    <script type="text/javascript">
+    
+        
+        //Width and height
+        var margin = {top: 10, bottom: 30, right: 30, left: 30},
+            width = 700 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+        
+        //Intialising empty arrays
+        var dataset_2006 = [],
+            dataset_2014 = [],
+            dataset_2016 = [];
+        
+        //Telling x and y the amounts of pixel it have available 
+        var x = d3.scale.ordinal()
+                        .rangeRoundBands([0, width], 0.3);
+        
+        var y = d3.scale.linear()
+                        .range([height, 0]);
+        
+        //Binding x and y to the axes
+        var xAxis = d3.svg.axis()
+                      .scale(x)
+                      .orient("bottom");
+       
+        var yAxis = d3.svg.axis()
+                      .scale(y)
+                      .orient("left")
+                      .ticks(10);
+        
+                
+        //Creating a svg canvas for the bar chart
+        var svg = d3.select("body").append("svg")
+                                   .attr("width", width + margin.left + margin.right)
+                                   .attr("height", height + margin.top + margin.bottom)
+                                   .append("g")
+                                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        
+        //loading the csv file and call a counter function to make a dataset
+        d3.csv("SFPD_Tenderloin_Incidents_Jan_2016.csv", function(data) {
+            dataset_2016 = countDaysOfWeek(data);
+        })
+        
+        d3.csv("SFPD_Tenderloin_Incidents_Jan_2014.csv", function(data) {
+            dataset_2014 = countDaysOfWeek(data);
+        });
+        
+        d3.csv("SFPD_Tenderloin_Incidents_Jan_2006.csv", function(data) {
+            dataset_2006 = countDaysOfWeek(data);
+            
+            /*
+            Running the setup for the bar chart to showcase the data for 2006 when
+            loading the website.
+            Only setting the x and y domain one time since changing the axes for each
+            dataset will have a negativ effect when comparing the datasets
+            */
+            x.domain(data.map(function(d) { return d.DayOfWeek; }));
+            y.domain([0, d3.max(dataset_2006, function(d) { return d.Frequency; })]);
+            
+            //Appending xAxis to the bottom of the canvas
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+            //Appending yAxis to the left side of the canvas
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")  //Appending a label to the yAxis
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 3) 
+                  .attr("dy", ".71em")
+                  .style("text-anchor", "end")
+                  .text("Frequency");
+            
+            svg.selectAll(".bar")
+                .data(dataset_2006)
+                .enter().append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.DayOfWeek); })
+                .attr("width", x.rangeBand())
+                .attr("y", function(d) { return y(d.Frequency); })
+                .attr("height", function(d) { return height - y(d.Frequency); });
+            });
+        
+        //Adding a listner to the radio buttons
+        d3.selectAll("input").on("change", change);
+        
+        //A function that update the bar chart to a new dataset
+        function change() {
+            //Depending on which botton was checked is the respected
+            //transition function called
+            if (this.value == 2016) {   
+                transition2016();
+            } else if (this.value == 2014) {
+                transition2014();
+            } else{
+                transition2006(); 
+            }
+        }
+        
+        //Transition functions that updates the rect
+        function transition2016() {
+            
+            svg.selectAll("rect") //Select the rect
+                .data(dataset_2016) 
+                .transition()       // Adding a transition
+                .duration(700)      //with duration and delay
+                .delay(function (d, i){return i*100;})
+                .attr("y", function(d) { return y(d.Frequency);})  //Sending the Frequency to y
+                .attr("height", function(d) { return height - y(d.Frequency); }); //in order to get pixels
+             
+        }
+        
+        //Transition function for 2014 dataset
+        function transition2014() {
+            
+            svg.selectAll("rect")
+                .data(dataset_2014)
+                .transition()
+                .duration(700)
+                .delay(function (d, i){return i*100;})
+                .attr("y", function(d) { return y(d.Frequency);})
+                .attr("height", function(d) { return height - y(d.Frequency); });
+             
+        }
+        
+        //Transition function for 2006 dataset
+        function transition2006() {
+            y.domain([0, d3.max(dataset_2006, function(d) { return d.Frequency; })]);
+            
+            svg.selectAll("rect")
+                .data(dataset_2006)
+                .transition()
+                .duration(700)
+                .delay(function (d, i){return i*100;})
+                .attr("y", function(d) { return y(d.Frequency);})
+                .attr("height", function(d) { return height - y(d.Frequency); });
+        }
+        
+        //Counters for each day of the week
+        var countMonday = 0,
+            countTuesday = 0,
+            countWednesday = 0,
+            countThursday = 0,
+            countFriday = 0,
+            countSaturday = 0,
+            countSunday = 0;
+            
+        //A counter function to count each frequency of a day
+        function countDaysOfWeek(data) {
+            //Resetting the counters with each call
+            countMonday = 0,
+            countTuesday = 0,
+            countWednesday = 0,
+            countThursday = 0,
+            countFriday = 0,
+            countSaturday = 0,
+            countSunday = 0;
+            //A for loop that inspect each index in the data set
+            for(var i = 0; i < data.length; ++i){
+                if(data[i].DayOfWeek == "Monday"){
+                    countMonday++;
+                } else if (data[i].DayOfWeek =="Tuesday" ){
+                    countTuesday++;
+                } else if (data[i].DayOfWeek == "Wednesday" ){
+                    countWednesday++;
+                } else if (data[i].DayOfWeek == "Thursday" ) {
+                    countThursday++;
+                } else if (data[i].DayOfWeek == "Friday" ){
+                    countFriday++;
+                } else if (data[i].DayOfWeek == "Saturday"){
+                    countSaturday++;
+                } else {
+                    countSunday++;
+                }
+            }
+            //Return an array with objects and values
+            return [{DayOfWeek: "Monday", Frequency: countMonday},
+                   {DayOfWeek: "Tuesday", Frequency: countTuesday},
+                   {DayOfWeek: "Wednesday", Frequency: countWednesday},
+                   {DayOfWeek: "Thursday", Frequency: countThursday},
+                   {DayOfWeek: "Friday", Frequency: countFriday},
+                   {DayOfWeek: "Saturday", Frequency: countSaturday},
+                   {DayOfWeek: "Sunday", Frequency: countSunday}];
+        }
+        
+        
+    </script>
+
+
+    <!--                                         Assigment 2D                                              -->
+
+
+</body>

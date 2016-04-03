@@ -102,7 +102,7 @@
     }
     
     function drawDatapoints(dataset, selector){
-      var dp = datapointGroup.selectAll("circle.datapoint").data(dataset.filter((d,i) => i%10==1))
+      var dp = datapointGroup.selectAll("circle.datapoint").data(dataset);//.filter((d,i) => i%10==1))
 
       dp.enter()
         .append("circle")
