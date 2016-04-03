@@ -49,7 +49,7 @@ function drawMap(dataset){
   
   // Add district names
   districtNameGroup.selectAll("text").data(dataset.features).enter()
-    .append("text").text(d => d.properties.DISTRICT).attr({
+    .append("text").text(function(d){ return d.properties.DISTRICT}).attr({
       x: d => path.centroid(d)[0],
       y: d => path.centroid(d)[1],
       class: "districtText",
