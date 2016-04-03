@@ -112,7 +112,7 @@ function drawCentroids(dataset, selector){
 
 // initializer function
 function init(){
-  
+  console.log("starting Init")
   // Load Data and call render when the data is loaded
   d3.json("../emil/week8/sfpddistricts.geojson", function(json) {
       mapData = json;
