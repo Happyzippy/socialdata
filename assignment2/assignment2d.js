@@ -59,7 +59,7 @@ function drawMap(dataset){
 // Draw the prostitution incidents on the map
 function drawDatapoints(dataset, selector){
   // Select and filter datapoints
-  var dp = datapointGroup.selectAll("circle.datapoint").data(dataset.filter(function(d,i) { i%5==1}));
+  var dp = datapointGroup.selectAll("circle.datapoint").data(dataset.filter(function(d,i) {return i%5==1}));
 
   // add svg DOM elements
   dp.enter()
@@ -70,8 +70,8 @@ function drawDatapoints(dataset, selector){
 
   // Update the data
   dp.attr({
-      cx: d => projection([d.lon, d.lat])[0],
-      cy: d => projection([d.lon, d.lat])[1],
+      cx: function(d){ return  projection([d.lon, d.lat])[0]},
+      cy: function(d){ return  projection([d.lon, d.lat])[1]},
       //fill: (d,i) => colorPalette(d[selector]),
       r: 2,
     });
@@ -91,17 +91,17 @@ function drawCentroids(dataset, selector){
   centroids.enter()
     .append("circle")
     .attr({
-      cx: d => projection([d.lon, d.lat])[0],
-      cy: d => projection([d.lon, d.lat])[1],
+      cx: function(d){ return projection([d.lon, d.lat])[0]},
+      cy: function(d){ return projection([d.lon, d.lat])[1]},
       r: 0,
-      fill: (d,i) => colorPalette(i),
+      fill: function(d,i){ return colorPalette(i)},
       class:"centroid",
     });
 
   // update svg DOM
   centroids.transition().duration(1000).ease("elastic").attr({
-      cx: d => projection([d.lon, d.lat])[0],
-      cy: d => projection([d.lon, d.lat])[1],
+      cx: function(d){ return projection([d.lon, d.lat])[0]},
+      cy: function(d){ return projection([d.lon, d.lat])[1]},
       r: 5,
     });
 
@@ -164,7 +164,7 @@ function attachSvgElements(){
   svg2.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + 50 / 2 + ")")
-      .call(d3.svg.axis().scale(x).orient("bottom").tickFormat(d=>d).tickSize(2).ticks(4).tickPadding(12))
+      .call(d3.svg.axis().scale(x).orient("bottom").tickFormat(function(d){ return d}).tickSize(2).ticks(4).tickPadding(12))
 
   slider = svg2.append("g").attr("class", "slider").call(brush);
 
