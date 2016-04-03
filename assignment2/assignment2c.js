@@ -126,7 +126,7 @@ function transition2014() {
 
 //Transition function for 2006 dataset
 function transition2006() {
-    y.domain([0, d3.max(dataset_2006, function(d) { return d.Frequency; })]);
+    yScale.domain([0, d3.max(dataset_2006, function(d) { return d.Frequency; })]);
     
     svgc.selectAll("rect")
         .data(dataset_2006)
