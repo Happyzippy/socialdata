@@ -1,8 +1,5 @@
 //Assignment 2D
 
-// Start when loaded
-window.onload = function() { init() };
-
 // Variables
 var chart_height =500;
 var chart_width = 700;
@@ -115,6 +112,39 @@ function drawCentroids(dataset, selector){
 
 // initializer function
 function init(){
+  
+  // Load Data and call render when the data is loaded
+  d3.json("../emil/week8/sfpddistricts.geojson", function(json) {
+      mapData = json;
+      renderMap('k6');
+  });
+
+  d3.csv("../emil/week8/prostitution_coordinates.csv", 
+    function(line){
+      return {
+        lon:+line['X'],
+        lat:+line['Y'],
+        k2: +line['k2'],
+        k3: +line['k3'],
+        k4: +line['k4'],
+        k5: +line['k5'],
+        k6: +line['k6'],
+      }
+    },
+    function(data) {
+      datapoints = data
+      attachSvgElements()
+      renderMap('k6');
+    });
+
+  d3.json("../emil/week8/prostitution_centroids.json",
+    function(data) {
+      centroidData = data
+      renderMap('k6');
+    });
+}
+
+function attachSvgElements(){
   //Add map svg elements
   svg = d3.select("#d_map")
   .append("svg")
@@ -150,35 +180,6 @@ function init(){
       .attr("r", 7);
 
   slider.call(brush.event).transition().duration(750).call(brush.extent([2,2])).call(brush.event);
-
-  // Load Data and call render when the data is loaded
-  d3.json("../emil/week8/sfpddistricts.geojson", function(json) {
-      mapData = json;
-      renderMap('k6');
-  });
-
-  d3.csv("../emil/week8/prostitution_coordinates.csv", 
-    function(line){
-      return {
-        lon:+line['X'],
-        lat:+line['Y'],
-        k2: +line['k2'],
-        k3: +line['k3'],
-        k4: +line['k4'],
-        k5: +line['k5'],
-        k6: +line['k6'],
-      }
-    },
-    function(data) {
-      datapoints = data
-      renderMap('k6');
-    });
-
-  d3.json("../emil/week8/prostitution_centroids.json",
-    function(data) {
-      centroidData = data
-      renderMap('k6');
-    });
 }
 
 // extra variables for slider
@@ -205,6 +206,8 @@ function brushed() {
     }
     handle.transition().duration(300).attr("cx", x(value));
   }
-  
+
   oldValue = value;
 }
+
+init();
