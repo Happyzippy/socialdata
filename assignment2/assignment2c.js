@@ -29,7 +29,7 @@ var yAxis = d3.svg.axis()
 
         
 //Creating a svg canvas for the bar chart
-var svg = d3.select("body").append("svg")
+var svgc = d3.select("body").append("svg")
                            .attr("width", width + margin.left + margin.right)
                            .attr("height", height + margin.top + margin.bottom)
                            .append("g")
@@ -57,12 +57,12 @@ d3.csv("SFPD_Tenderloin_Incidents_Jan_2006.csv", function(data) {
     yScale.domain([0, d3.max(dataset_2006, function(d) { return d.Frequency; })]);
     
     //Appending xAxis to the bottom of the canvas
-    svg.append("g")
+    svgc.append("g")
         .attr("class", "x axis barChart")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
     //Appending yAxis to the left side of the canvas
-    svg.append("g")
+    svgc.append("g")
         .attr("class", "y axis")
         .call(yAxis)
         .append("text")  //Appending a label to the yAxis
@@ -72,7 +72,7 @@ d3.csv("SFPD_Tenderloin_Incidents_Jan_2006.csv", function(data) {
           .style("text-anchor", "end")
           .text("Frequency");
     
-    svg.selectAll(".bar")
+    svgc.selectAll(".bar")
         .data(dataset_2006)
         .enter().append("rect")
         .attr("class", "bar")
@@ -101,7 +101,7 @@ function change() {
 //Transition functions that updates the rect
 function transition2016() {
     
-    svg.selectAll("rect") //Select the rect
+    svgc.selectAll("rect") //Select the rect
         .data(dataset_2016) 
         .transition()       // Adding a transition
         .duration(700)      //with duration and delay
@@ -114,7 +114,7 @@ function transition2016() {
 //Transition function for 2014 dataset
 function transition2014() {
     
-    svg.selectAll("rect")
+    svgc.selectAll("rect")
         .data(dataset_2014)
         .transition()
         .duration(700)
@@ -128,7 +128,7 @@ function transition2014() {
 function transition2006() {
     y.domain([0, d3.max(dataset_2006, function(d) { return d.Frequency; })]);
     
-    svg.selectAll("rect")
+    svgc.selectAll("rect")
         .data(dataset_2006)
         .transition()
         .duration(700)
