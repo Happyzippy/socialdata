@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Pedigree</title>
+    <script type="text/javascript" src="../../libraries/d3/d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.4.3/tabletop.min.js"></script>
+    <style>
+        .pedigree-table{
+            border:none,
+            width:100%;
+            page-break-inside:auto;
+        }
+
+        .name
+        {
+            vertical-align: bottom;
+            border-bottom: solid 2px black;
+            margin: 0;
+            padding: 10px 10px 5px 10px;
+        }
+
+        .desc
+        {
+            vertical-align: top; 
+            font-size: .85em;
+            color: #777;
+            margin: 0;
+            padding: 2px 10px 10px 10px;
+        }
+
+        .male.desc, .female.name
+        {
+            border-left: solid 2px black;
+        }
+
+    </style>
+    <!--<style>
+        .pedigree-table{
+            width:100%;
+            page-break-inside:auto;
+        }
+        .male, .female {
+            height:20px;
+            width:16%;
+        }
+
+        .pedigree-table, .male, .female {
+            border: 4px solid white;
+            border-collapse: collapse;
+            font-size: small;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .pedigree-table h1{
+            padding:0px;
+            font-size:small;
+        }
+
+        .male {
+            background-color: #CCEBFF;
+            -moz-border-radius-topleft:5px;
+            -webkit-border-top-left-radius:5px;
+            border-top-left-radius:5px
+        }
+
+        .female {
+            background-color: #EBEBFF;
+            -moz-border-radius-bottomleft:5px;
+            -webkit-border-bottom-left-radius:5px;
+            border-bottom-left-radius:5px
+        }
+        .name
+        {
+            vertical-align: bottom;
+            border-bottom: none;
+            margin: 0;
+            padding: 10px 10px 5px 10px;
+        }
+
+        .desc
+        {
+            vertical-align: top; 
+            border-top:none;
+            font-size: .85em;
+            color: #777;
+            margin: 0;
+            padding: 2px 10px 10px 10px;
+        }
+
+        @media print{
+            .pedigree-table{
+                page-break-inside:auto;
+            }
+            .male, .female {
+                height:7px;
+            }
+            h1{
+                font-size: 8pt;
+                margin-top:0px;
+                margin-bottom:0px;
+            }
+
+            .pedigree-table, .male, .female {
+                border: 1px solid black;
+                font-size: 8pt;
+            }
+        }
+
+    </style>-->
+<body>
+<script type="text/javascript">
+    window.onload = function() { init() };
+    
+    var animals;
+    var urlParam = getUrlParam();
+
+    function init(){
+        Tabletop.init( { key: '1lcFYWZAfJqrzu4DeBMD3vSCOuK2m6XABIqmQCtT5ghY',
+                callback: sheetLoaded,
+                wanted: [ "Animals" ],
+                simpleSheet: false });
+    }
+
+    function sheetLoaded(df, tabletop){           
+        data = df;
+        
+        //Index Animals
+        var animalIds = data.Animals.elements.map(function(val){return val.Id});
+        animals = {};
+        for(i = 0; i < animalIds.length ; i++){
+            animals[animalIds[i]] = data.Animals.elements[i];
+        }
+
+
+        var animal;
+        if(urlParam.id){
+            animal = animals[urlParam.id]
+        }else if(urlParam.name){
+            var name = urlParam.name.toLowerCase();
+            for (var a in animals) {
+                if(animals[a].PedigreeName.toLowerCase().indexOf(name) != -1){
+                    animal = animals[a];
+                    break;
+                }
+            }
+        }
+        depth = urlParam.depth > 1 ? urlParam.depth-1 : 3;
+        
+        renderPedigree(animal, depth);
+    }
+
+    function renderPedigree(animal, depth){
+        var container = d3.select("#container");
+        container.append("h1").html("Stamtavle for " + nameText(animal));
+        container.append("p").html(descriptionText(animal));
+        var tbody = container.append("table").attr({
+                cellpadding:0,
+                cellspacing:0,
+                class:"pedigree-table",
+            }).append("tbody");
+        var row = tbody.append("tr");
+        addTableTreeNode(tbody, row, animals[animal.DadId], "male", depth, -1);
+        var row = tbody.append("tr");
+        addTableTreeNode(tbody, row, animals[animal.MomId], "female", depth, -1);
+    }
+
+    function addTableTreeNode(elem, row, animal, sex, nStart, nLeft){
+        var dadId, momId;
+
+        nLeft = (nLeft == -1) ? nStart : nLeft;
+
+        // Add Name
+        if(animal){
+            row.append("td").attr({
+                rowspan: Math.pow(2,nLeft),
+                class: "name " + sex,
+                width: 100/(nStart + 1) + "%"
+            }).html(nameText(animal));
+            dadId = animal.DadId;
+        }
+        
+        // Dad
+        if(nLeft > 0){
+            addTableTreeNode(elem, row, animals[dadId], "male", nStart, nLeft-1);
+        }
+
+        // Add description
+        nextRow = elem.append("tr");
+        if(animal){
+            nextRow.append("td").attr({
+                rowspan: Math.pow(2,nLeft),
+                class: "desc " + sex,
+                width: 100/(nStart + 1) + "%"
+            }).html(descriptionText(animal));
+            momId = animal.MomId;
+        }
+
+        // Mom
+        if(nLeft > 0){
+            addTableTreeNode(elem, nextRow, animals[momId], "female", nStart, nLeft-1);
+        }
+    }
+
+    function nameText(animal){
+        return animal.PedigreeName;   
+    }
+
+    function descriptionText(animal){
+        descText = animal.Phenotype;
+        if(animal.Birth || animal.Diseased){
+            descText += "<br/>" + animal.Birth + "-" + animal.Diseased
+        }
+        return descText;
+    }
+
+    function getUrlParam() {
+        var result = {},
+            tmp = [];
+
+        var items = location.search.substr(1).split("&");
+        for (var index = 0; index < items.length; index++) {
+            tmp = items[index].split("=");
+            result[tmp[0]] = decodeURIComponent(tmp[1]);
+        }
+        return result;
+    }
+
+</script>
+<div id="container"></div>
+</body>

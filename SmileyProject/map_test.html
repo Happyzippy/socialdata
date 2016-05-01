@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Week 7 part 1</title>
+  <script type="text/javascript" src="../../libraries/d3/d3.js"></script>
+  <style>
+      body {
+        font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      }
+
+      .district{
+        fill: #D0D0D0;
+        stroke: #A0A0A0;
+      }
+
+      .districtText{
+        fill: #555;
+        font-size: 12px;
+      }
+
+      .datapoint{
+        
+      }
+
+      .centroid {
+        stroke: black;
+      }
+
+      .domain {
+        fill: #A0A0A0;
+      }
+
+      .handle {
+        fill:steelblue;
+        stroke:black;
+        stroke-width: 1.5;
+      }
+
+  </style>
+</head>
+<body>
+  <script type="text/javascript">
+    window.onload = function() { init() };
+    // data
+    var chart_height =500;
+    var chart_width = 600;
+    var margin = {top: 20, right: 50, bottom: 10, left: 50};
+
+    var colorPalette = d3.scale.category10();
+    var projection;
+
+    var mapData;
+    var centroidData;
+    var datapoints;
+
+    var svg, mapGroup, datapointGroup, centroidGroup;
+
+    function renderMap(selector){
+      drawMap(mapData);
+    }
+
+    function drawMap(dataset){
+      // First Pass
+      centroid = [10.349506, 55.834041];
+      scale = 5000;
+      projection = d3.geo.mercator().scale([scale]).center(centroid).translate([chart_width/2, chart_height/2]);
+      var path = d3.geo.path().projection(projection)
+
+      //Second pass fix scale and offset
+      bounds  = path.bounds(dataset);
+      var hscale  = scale*chart_width  / (bounds[1][0] - bounds[0][0]);
+      var vscale  = scale*chart_height / (bounds[1][1] - bounds[0][1]);
+      var scale   = (hscale < vscale) ? hscale: vscale;
+      var offset  = [chart_width - (bounds[0][0] + bounds[1][0])/2,
+                      chart_height - (bounds[0][1] + bounds[1][1])/2];
+
+      projection = d3.geo.mercator().scale([scale]).center(centroid).translate(offset);
+      var path = d3.geo.path().projection(projection)
+      
+      mapGroup.selectAll("path")
+        .data(dataset.features)
+        .enter()
+        .append("path")
+        .attr({
+          d:path,
+          class: "district"
+        });
+        
+      mapGroup.selectAll("text").data(dataset.features).enter()
+        .append("text").text(d => d.properties.DISTRICT).attr({
+          x: d => path.centroid(d)[0],
+          y: d => path.centroid(d)[1],
+          "text-anchor":"middle",
+          class: "districtText",
+        });
+    }
+    
+    function drawDatapoints(dataset, selector){
+      var dp = datapointGroup.selectAll("circle.datapoint").data(dataset);//.filter((d,i) => i%10==1))
+
+      dp.enter()
+        .append("circle")
+        .attr({
+          class:"datapoint",
+        });
+
+      dp.attr({
+          cx: d => projection([d.lon, d.lat])[0],
+          cy: d => projection([d.lon, d.lat])[1],
+          //fill: (d,i) => colorPalette(d[selector]),
+          r: 2,
+        });
+
+      dp.exit().remove();
+    }
+
+    function drawCentroids(dataset, selector){
+      data = dataset[selector];
+      
+      var centroids = centroidGroup.selectAll("circle.centroid").data(data)
+
+      centroids.enter()
+        .append("circle")
+        .attr({
+          cx: d => projection([d.lon, d.lat])[0],
+          cy: d => projection([d.lon, d.lat])[1],
+          r: 0,
+          fill: (d,i) => colorPalette(i),
+          class:"centroid",
+        });
+
+      centroids.transition().duration(1000).ease("elastic").attr({
+          cx: d => projection([d.lon, d.lat])[0],
+          cy: d => projection([d.lon, d.lat])[1],
+          r: 5,
+        });
+
+      centroids.exit().remove();
+    }
+
+    function init(){
+
+      svg = d3.select("#d_map")
+      .append("svg")
+      .attr("width", chart_width + margin.left + margin.right)
+      .attr("height", chart_height + margin.top + margin.bottom);
+
+      mapGroup = svg.append("g").attr("class", "mapGroup");
+      datapointGroup = svg.append("g").attr("class", "datapointGroup");
+      centroidGroup = svg.append("g").attr("class", "centroidGroup");
+
+      // Load Data
+      d3.json("../data/postnumre2008-07-01.geojson", function(json) {
+          mapData = json;
+          renderMap('k6');
+      });
+    }
+
+    var x = d3.scale.linear().domain([2, 6]).range([0, chart_width]).clamp(true);
+
+    var brush = d3.svg.brush()
+        .x(x)
+        .extent([0, 0])
+        .on("brush", brushed);
+
+    var svg2, slider, handle;
+
+    var oldValue = 0;
+    function brushed() {
+      var value = brush.extent()[0];
+      
+      if (d3.event.sourceEvent) { // not a programmatic event
+        value = Math.round(x.invert(d3.mouse(this)[0]));
+        brush.extent([value, value]);
+      }
+      if(oldValue != value){
+        if(mapData != null & centroidData != null & datapoints != null){
+          drawCentroids(centroidData, "k"+value);
+        }
+        console.log(value)
+        handle.transition().duration(300).attr("cx", x(value));
+      }
+      oldValue = value;
+    }
+    
+  </script>
+  <div id="2d_container">
+    <div id="d_map"></div>
+    <div id="d_slider"></div>
+  </div>
+</body>
+</html>
