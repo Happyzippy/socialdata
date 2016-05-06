@@ -10,8 +10,7 @@
       }
 
       .district{
-        fill: #D0D0D0;
-        stroke: #A0A0A0;
+        
       }
 
       .districtText{
@@ -38,16 +37,27 @@
       }
 
   </style>
+
 </head>
 <body>
   <script type="text/javascript">
+  //fill: #D0D0D0;
+  //stroke: #A0A0A0;
     window.onload = function() { init() };
     // data
     var chart_height =500;
     var chart_width = 600;
     var margin = {top: 20, right: 50, bottom: 10, left: 50};
 
-    var colorPalette = d3.scale.category10();
+    //var colorPalette = d3.scale.category10();
+    var color = d3.scale.threshold()
+      .domain([0, 20, 75, 200, 400])
+      .range(["#f2f0f7", "#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
+
+    var color = d3.scale.linear()
+      .domain([0.1, 5000])
+      .range(["#f2f0f7", "#54278f"]);
+
     var projection;
 
     var mapData;
@@ -84,16 +94,20 @@
         .append("path")
         .attr({
           d:path,
-          class: "district"
-        });
+          class: (e) => "district " + e.properties.Indbyggere + ", " + e.properties.Areal,
+          fill: function(e){return color(e.properties.Indbyggere / e.properties.Areal)}
+        }).append("svg:title")
+        .text(function(e) { return e.properties.Name + ", " + e.properties.Indbyggere + ", " + e.properties.Areal});
         
+      /*
       mapGroup.selectAll("text").data(dataset.features).enter()
-        .append("text").text(d => d.properties.DISTRICT).attr({
+        .append("text").text(d => d.properties.Areal).attr({
           x: d => path.centroid(d)[0],
           y: d => path.centroid(d)[1],
           "text-anchor":"middle",
           class: "districtText",
         });
+      */
     }
     
     function drawDatapoints(dataset, selector){
@@ -151,7 +165,7 @@
       centroidGroup = svg.append("g").attr("class", "centroidGroup");
 
       // Load Data
-      d3.json("../data/postnumre2008-07-01.geojson", function(json) {
+      d3.json("../data/postnumre_clean.geojson", function(json) {
           mapData = json;
           renderMap('k6');
       });
