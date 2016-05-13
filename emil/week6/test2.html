@@ -117,7 +117,7 @@
             node.append("circle")
                 .attr("r","5")
                 .attr("fill", e => e.Male=="1" ? "blue" : "red")
-                .attr("class", function(e) {return (e.PedigreeName.toLowerCase().indexOf("eifos")!=-1) ? "selected" : ""})
+                .attr("class", function(e) {return (e.Phenotype.toLowerCase().indexOf("dumbo")!=-1) ? "selected" : ""})
                 .append("svg:title")
                 .text(function(e){
                     return e.PedigreeName;

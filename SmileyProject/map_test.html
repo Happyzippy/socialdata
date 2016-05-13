@@ -55,8 +55,14 @@
       .range(["#f2f0f7", "#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
 
     var color = d3.scale.linear()
-      .domain([0.1, 5000])
-      .range(["#f2f0f7", "#54278f"]);
+      .domain([1, 1.5])
+      .range(["#e5f6f2", "#18423a"]);
+
+    var color = d3.scale.log()
+      .domain([5, 15000])
+      .range(["#e5f6f2", "#18423a"]);
+
+    //var color = d3.scale.category20b();
 
     var projection;
 
@@ -95,10 +101,13 @@
         .attr({
           d:path,
           class: (e) => "district " + e.properties.Indbyggere + ", " + e.properties.Areal,
+          //fill: function(e){return color(e.properties.Indbyggere / e.properties.Areal)}
           fill: function(e){return color(e.properties.Indbyggere / e.properties.Areal)}
+          //fill: function(e){return color(e.properties.MostCommonPixi)}
+          //fill: function(e){return color(e.properties.AverageSmiley)}
         }).append("svg:title")
-        .text(function(e) { return e.properties.Name + ", " + e.properties.Indbyggere + ", " + e.properties.Areal});
-        
+        .text(function(e) { return e.properties.Description + "\nCitizens: " + e.properties.Indbyggere + "\nSmiley Companies: " + e.properties.SmileyVirksomheder + "\nMost common sector: " + e.properties.MostCommonPixi + "\nAverage Smiley Rating: " + e.properties.AverageSmiley.toFixed(2)});
+
       /*
       mapGroup.selectAll("text").data(dataset.features).enter()
         .append("text").text(d => d.properties.Areal).attr({
