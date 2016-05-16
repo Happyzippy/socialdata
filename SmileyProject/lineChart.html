@@ -88,7 +88,6 @@ var cValue = function(d) { return d.type;},
     xScale.domain([0, 138]);
     yScale.domain([0, 12]);
 
-
     // reformulate data for d3
     //groupId = 1;
     var groupData = dataset.items[groupId];
@@ -121,8 +120,12 @@ var cValue = function(d) { return d.type;},
       groupText = "Like group 1 a very broad group. but this group is mostly checked once a year. "
     }
 
-
-    groupName.text(groupText + " The member sectors are; " + groupData.groups);
+    groupText += "The member sectors are; "
+    for(i = 0; i < groupData.groups.length-1; i++){
+      groupText += groupData.groups[i] + ", "
+    }
+    groupText += groupData.groups[groupData.groups.length-1]
+    groupName.text(groupText);
 
     // line
     var line_ = svg.selectAll(".plotline").data(data);
