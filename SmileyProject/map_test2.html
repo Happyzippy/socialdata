@@ -43,6 +43,7 @@
   <script type="text/javascript">
   //fill: #D0D0D0;
   //stroke: #A0A0A0;
+    var buf;
     window.onload = function() { init() };
     // data
     var chart_height =500;
@@ -67,33 +68,22 @@
     var projection;
 
     var mapData;
-    var centroidData;
-    var datapoints;
+    var bewareList;
 
     var svg, mapGroup, datapointGroup, centroidGroup;
 
-    function renderMap(selector){
-      drawMap(mapData);
+    function renderMap(centerLocation){
+      drawMap(mapData, centerLocation);
+      drawDatapoints(bewareList)
     }
 
-    function drawMap(dataset){
+    function drawMap(dataset, centerLocation){
       // First Pass
-      centroid = [10.349506, 55.834041];
-      scale = 5000;
+      centroid = [centerLocation.lng, centerLocation.lat];
+      scale = 50000;
       projection = d3.geo.mercator().scale([scale]).center(centroid).translate([chart_width/2, chart_height/2]);
       var path = d3.geo.path().projection(projection)
 
-      //Second pass fix scale and offset
-      bounds  = path.bounds(dataset);
-      var hscale  = scale*chart_width  / (bounds[1][0] - bounds[0][0]);
-      var vscale  = scale*chart_height / (bounds[1][1] - bounds[0][1]);
-      var scale   = (hscale < vscale) ? hscale: vscale;
-      var offset  = [chart_width - (bounds[0][0] + bounds[1][0])/2,
-                      chart_height - (bounds[0][1] + bounds[1][1])/2];
-
-      projection = d3.geo.mercator().scale([scale]).center(centroid).translate(offset);
-      var path = d3.geo.path().projection(projection)
-      
       mapGroup.selectAll("path")
         .data(dataset.features)
         .enter()
@@ -175,8 +165,23 @@
 
       // Load Data
       d3.json("../data/postnumre_clean.geojson", function(json) {
-          mapData = json;
-          renderMap('k6');
+        mapData = json;
+        d3.csv("../data/beware_list.csv",
+          function(line){
+            return {
+              lat: +line.Geo_Lat,
+              lon: +line.Geo_Lng,
+            }
+          },
+          function(csv) {
+            bewareList = csv
+            
+            // use google reverse geocode api to locate address
+            d3.json("http://maps.google.com/maps/api/geocode/json?&components=country:DK&address=Ryparken", function(json) {
+              buf = json; 
+              renderMap(json.results[0].geometry.location);
+            });
+        });
       });
     }
 
@@ -190,6 +195,7 @@
     var svg2, slider, handle;
 
     var oldValue = 0;
+
     function brushed() {
       var value = brush.extent()[0];
       

@@ -1,3 +1,6 @@
 *
 !.gitignore
 !allekontrolresultater.csv
+!worstSmileyNames.csv
+!postnumre_clean.geojson
+!kontroltid_hist_data.json
