@@ -59,8 +59,8 @@
             .attr("d", "M 0,0 V 4 L 6,2 Z");
 
         var force = d3.layout.force()
-            .gravity(.1)
-            .distance(10)
+            .gravity(.05)
+            .distance(5)
             .charge(-50)
             .size([width, height]);        
 
